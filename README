@@ -1,0 +1,38 @@
+PhishNet 🛡️
+
+Grammarly for your wallet – AI-powered scam detection
+
+What is PhishNet?
+
+PhishNet is a web application that helps you detect scams and phishing attempts in payment messages (like Venmo, Zelle, CashApp, etc.) before you send money. Just paste any payment-related message into the tool, and PhishNet will analyze it using AI and natural language processing to determine how risky it is.
+
+Features
+
+AI Language Analysis: Detects scam tactics, urgency, and suspicious language.
+Real-time Scanning: Instantly analyzes messages before you send money.
+Smart Risk Scoring: Rates risk on a 0-100 scale, with clear recommendations.
+Platform Integration: Works with all major payment platforms.
+How to Use
+
+Open the PhishNet web page in your browser.
+Paste your payment message into the text box.
+Click the Analyze for Scams button.
+View the risk score, confidence level, and detailed analysis.
+Follow the recommendations to keep your money safe!
+Example Messages
+
+“URGENT: Your account will be closed unless you send $200 to verify.”
+“Hey! Can you send me $50 for the concert tickets? I’ll pay you back tomorrow.”
+“IRS TAX REFUND: Send $100 processing fee to claim your $2,000 refund.”
+Live Dashboard
+
+PhishNet’s dashboard shows the number of scams blocked, money saved, and users protected in real time!
+
+How it Works (Technical Overview)
+
+Uses JavaScript and in-browser AI to scan for scam patterns.
+Assigns risk scores based on keywords, urgency, impersonation, and more.
+Shows detailed red flags and confidence scores for transparency.
+
+You can use the link below to see the project
+https://claude.ai/public/artifacts/35855ade-8f59-4f3e-aaa9-9eb21df8a87a 
