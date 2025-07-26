@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishNet - AI-Powered Scam Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: white;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: #5a67d8;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-section textarea {
+            width: 100%;
+            height: 120px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: #5a67d8;
+            box-shadow: 0 0 0 3px rgba(90, 103, 216, 0.1);
+        }
+
+        .analyze-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .results.safe {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            color: white;
+        }
+
+        .results.warning {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+        }
+
+        .results.danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .risk-score {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .dashboard {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0369a1;
+        }
+
+        .stat-label {
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .recent-scams {
+            margin-top: 30px;
+        }
+
+        .scam-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ef4444;
+            animation: slideInLeft 0.5s ease;
+        }
+
+        .detection-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">🛡️ PhishNet</div>
+            <div class="tagline">Grammarly for your wallet - AI-powered scam detection</div>
+        </header>
+
+        <div class="main-content">
+            <div class="card input-section">
+                <h3>🔍 Analyze Payment Message</h3>
+                <textarea id="messageInput" placeholder="Paste your Venmo, Zelle, or payment message here...
+
+Examples:
+- 'URGENT: Your account will be closed unless you send $200 to verify'
+- 'Hey! Can you send me $50 for the concert tickets? I'll pay you back tomorrow'
+- 'IRS TAX REFUND: Send $100 processing fee to claim your $2,000 refund'"></textarea>
+                <button class="analyze-btn" onclick="analyzeMessage()">
+                    🤖 Analyze for Scams
+                </button>
+                <div id="analysisResults"></div>
+            </div>
+
+            <div class="card">
+                <h3>📊 Live Dashboard</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="scamsBlocked">1,247</div>
+                        <div class="stat-label">Scams Blocked</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="moneySaved">$89,340</div>
+                        <div class="stat-label">Money Saved</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="activeUsers">25,891</div>
+                        <div class="stat-label">Protected Users</div>
+                    </div>
+                </div>
+
+                <div class="recent-scams">
+                    <h4>🚨 Recent Scam Attempts Blocked</h4>
+                    <div class="scam-item">
+                        <strong>Fake IRS Refund</strong> - Blocked 2 minutes ago
+                    </div>
+                    <div class="scam-item">
+                        <strong>Romance Scam</strong> - Blocked 5 minutes ago
+                    </div>
+                    <div class="scam-item">
+                        <strong>Fake Invoice</strong> - Blocked 8 minutes ago
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <h3>🔧 Detection Features</h3>
+            <div class="detection-features">
+                <div class="feature">
+                    <div class="feature-icon">🧠</div>
+                    <h4>AI Language Analysis</h4>
+                    <p>Advanced NLP detects scam patterns, urgency tactics, and suspicious language</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Real-time Scanning</h4>
+                    <p>Instant analysis of payment messages before you send money</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h4>Smart Risk Scoring</h4>
+                    <p>Assigns risk levels from 0-100 based on multiple scam indicators</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📱</div>
+                    <h4>Platform Integration</h4>
+                    <p>Works with Venmo, Zelle, CashApp, PayPal, and more</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulated AI scam detection backend
+        class PhishNetAI {
+            constructor() {
+                this.scamPatterns = [
+                    // Urgency indicators
+                    { pattern: /urgent|immediately|asap|right now|hurry/i, weight: 25, type: 'urgency' },
+                    { pattern: /act now|limited time|expires today/i, weight: 30, type: 'urgency' },
+                    
+                    // Authority impersonation
+                    { pattern: /irs|government|bank|paypal|venmo|official/i, weight: 35, type: 'authority' },
+                    { pattern: /agent|representative|department|security team/i, weight: 30, type: 'authority' },
+                    
+                    // Financial pressure
+                    { pattern: /suspended|closed|blocked|frozen|restricted/i, weight: 40, type: 'pressure' },
+                    { pattern: /verify|confirm|update|reactivate/i, weight: 25, type: 'pressure' },
+                    
+                    // Money requests
+                    { pattern: /send.*\$|pay.*\$|transfer.*\$/i, weight: 20, type: 'money' },
+                    { pattern: /fee|processing|tax|refund/i, weight: 25, type: 'money' },
+                    
+                    // Suspicious language
+                    { pattern: /congratulations|winner|selected|prize/i, weight: 30, type: 'prize' },
+                    { pattern: /click here|link|website|verify account/i, weight: 25, type: 'phishing' },
+                    
+                    // Romance/emergency scams
+                    { pattern: /emergency|hospital|accident|stuck|help me/i, weight: 35, type: 'emergency' },
+                    { pattern: /love|relationship|meet|dating/i, weight: 20, type: 'romance' }
+                ];
+                
+                this.legitimatePatterns = [
+                    { pattern: /thanks|thank you|dinner|lunch|coffee/i, weight: -15 },
+                    { pattern: /rent|utilities|groceries|gas money/i, weight: -10 },
+                    { pattern: /birthday|gift|present/i, weight: -10 }
+                ];
+            }
+
+            analyzeMessage(message) {
+                let riskScore = 0;
+                let detectedFlags = [];
+                let confidence = 0;
+
+                // Check scam patterns
+                this.scamPatterns.forEach(pattern => {
+                    if (pattern.pattern.test(message)) {
+                        riskScore += pattern.weight;
+                        detectedFlags.push({
+                            type: pattern.type,
+                            weight: pattern.weight,
+                            description: this.getPatternDescription(pattern.type)
+                        });
+                    }
+                });
+
+                // Check legitimate patterns (reduce risk)
+                this.legitimatePatterns.forEach(pattern => {
+                    if (pattern.pattern.test(message)) {
+                        riskScore += pattern.weight;
+                    }
+                });
+
+                // Additional heuristics
+                const wordCount = message.split(' ').length;
+                const hasNumbers = /\d/.test(message);
+                const hasSpecialChars = /[!@#$%^&*]/.test(message);
+                const allCaps = message === message.toUpperCase() && message.length > 10;
+
+                if (allCaps) {
+                    riskScore += 15;
+                    detectedFlags.push({
+                        type: 'formatting',
+                        weight: 15,
+                        description: 'Excessive use of capital letters (shouting)'
+                    });
+                }
+
+                if (wordCount < 5) riskScore -= 5; // Very short messages less likely to be scams
+                if (hasNumbers && hasSpecialChars) riskScore += 10;
+
+                // Ensure score is between 0-100
+                riskScore = Math.max(0, Math.min(100, riskScore));
+                
+                // Calculate confidence based on number of flags
+                confidence = Math.min(95, detectedFlags.length * 15 + 40);
+
+                return {
+                    riskScore,
+                    confidence,
+                    flags: detectedFlags,
+                    recommendation: this.getRecommendation(riskScore),
+                    emoji: this.getRiskEmoji(riskScore)
+                };
+            }
+
+            getPatternDescription(type) {
+                const descriptions = {
+                    'urgency': 'Creates false sense of urgency',
+                    'authority': 'Impersonates authority figure',
+                    'pressure': 'Uses pressure tactics',
+                    'money': 'Requests money transfer',
+                    'prize': 'Fake prize or reward claim',
+                    'phishing': 'Contains phishing indicators',
+                    'emergency': 'Fake emergency situation',
+                    'romance': 'Potential romance scam',
+                    'formatting': 'Suspicious formatting'
+                };
+                return descriptions[type] || 'Suspicious pattern detected';
+            }
+
+            getRecommendation(score) {
+                if (score >= 70) {
+                    return "🚨 HIGH RISK - This looks like a scam! Do not send money. Block the sender.";
+                } else if (score >= 40) {
+                    return "⚠️ MEDIUM RISK - Be very cautious. Verify the sender through other means before sending money.";
+                } else if (score >= 20) {
+                    return "🟡 LOW RISK - Seems mostly safe, but stay alert for any red flags.";
+                } else {
+                    return "✅ SAFE - This message appears legitimate. No major scam indicators detected.";
+                }
+            }
+
+            getRiskEmoji(score) {
+                if (score >= 70) return "🚨";
+                if (score >= 40) return "⚠️";
+                if (score >= 20) return "🟡";
+                return "✅";
+            }
+        }
+
+        const phishNet = new PhishNetAI();
+
+        function analyzeMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const resultsDiv = document.getElementById('analysisResults');
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                resultsDiv.innerHTML = '<div class="results warning">⚠️ Please enter a message to analyze</div>';
+                return;
+            }
+
+            // Show loading
+            resultsDiv.innerHTML = '<div class="results" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white;">🤖 Analyzing message...</div>';
+
+            // Simulate AI processing delay
+            setTimeout(() => {
+                const analysis = phishNet.analyzeMessage(message);
+                displayResults(analysis);
+                updateStats();
+            }, 1500);
+        }
+
+        function displayResults(analysis) {
+            const resultsDiv = document.getElementById('analysisResults');
+            let riskClass = 'safe';
+            
+            if (analysis.riskScore >= 70) riskClass = 'danger';
+            else if (analysis.riskScore >= 40) riskClass = 'warning';
+
+            let flagsHtml = '';
+            if (analysis.flags.length > 0) {
+                flagsHtml = '<div style="margin-top: 15px;"><strong>🚩 Red Flags Detected:</strong><ul style="margin-top: 10px; padding-left: 20px;">';
+                analysis.flags.forEach(flag => {
+                    flagsHtml += `<li>${flag.description} (Risk: +${flag.weight})</li>`;
+                });
+                flagsHtml += '</ul></div>';
+            }
+
+            resultsDiv.innerHTML = `
+                <div class="results ${riskClass}">
+                    <div class="risk-score">${analysis.emoji} Risk Score: ${analysis.riskScore}/100</div>
+                    <div style="margin-bottom: 15px;">Confidence: ${analysis.confidence}%</div>
+                    <div><strong>${analysis.recommendation}</strong></div>
+                    ${flagsHtml}
+                </div>
+            `;
+
+            // Add pulse animation for high risk
+            if (analysis.riskScore >= 70) {
+                resultsDiv.querySelector('.results').classList.add('pulse');
+            }
+        }
+
+        function updateStats() {
+            // Simulate real-time stats updates
+            const scamsBlocked = document.getElementById('scamsBlocked');
+            const moneySaved = document.getElementById('moneySaved');
+            const activeUsers = document.getElementById('activeUsers');
+
+            const currentScams = parseInt(scamsBlocked.textContent.replace(',', ''));
+            const currentMoney = parseInt(moneySaved.textContent.replace('$', '').replace(',', ''));
+            const currentUsers = parseInt(activeUsers.textContent.replace(',', ''));
+
+            scamsBlocked.textContent = (currentScams + Math.floor(Math.random() * 3)).toLocaleString();
+            moneySaved.textContent = '$' + (currentMoney + Math.floor(Math.random() * 500)).toLocaleString();
+            activeUsers.textContent = (currentUsers + Math.floor(Math.random() * 10)).toLocaleString();
+        }
+
+        // Auto-update stats every 10 seconds
+        setInterval(updateStats, 10000);
+
+        // Add some example interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stats on load
+            setTimeout(() => {
+                document.querySelectorAll('.stat-number').forEach(el => {
+                    el.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        el.style.transform = 'scale(1)';
+                    }, 200);
+                });
+            }, 1000);
+        });
+
+        // Add enter key support for textarea
+        document.getElementById('messageInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                analyzeMessage();
+            }
+        });
+    </script>
+</body>
+</html>
