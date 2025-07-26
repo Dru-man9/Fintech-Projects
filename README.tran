@@ -1,0 +1,33 @@
+Transit
+
+Overview
+
+This project explores the cybersecurity infrastructure, vulnerabilities, privacy concerns, and regulatory frameworks surrounding two major U.S. public transit fare systems:
+
+MTA OMNY (New York City)
+NJ Transit Mobile Ticketing (New Jersey)
+Research Focus
+
+Cybersecurity Infrastructure:
+Analysis of security measures, technical standards, and compliance with state/federal frameworks.
+Vulnerabilities:
+Investigation into known and potential security flaws in fare systems, including unauthorized access and privacy risks.
+Privacy Concerns:
+Examination of how user data is protected, risks of trip-history exposure, and potential misuse of personal information.
+Regulatory Frameworks:
+Review of relevant laws and best practices, such as New York’s cybersecurity strategy and the New Jersey Data Protection Act (NJDPA).
+Key Findings
+
+OMNY’s trip-history feature was disabled due to privacy vulnerabilities allowing unauthorized access via credit card data.
+Both MTA and NJ Transit operate under strict state cybersecurity and privacy regulations, with requirements for regular security assessments and updates.
+NJ Transit complies with the NJDPA, effective 2025, emphasizing consumer data protection and privacy.
+References
+
+MTA Cybersecurity Strategy
+NY Governor’s Cybersecurity Fact Sheet (PDF)
+NJ Data Protection Act
+OMNY Privacy Concerns - S.T.O.P.
+NJ Statewide Information Security Manual (PDF)
+
+The link to the project is here:
+https://claude.ai/public/artifacts/7863b46b-cf31-4508-91a2-0869cfd572d0 
