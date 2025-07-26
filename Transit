@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transit Payment Systems Cybersecurity Audit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e4e4e7;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+            border-radius: 2px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e4e4e7;
+        }
+
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .system-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .system-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .system-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+
+        .system-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .system-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+        }
+
+        .vulnerability-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .vulnerability-item {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .vulnerability-item:hover {
+            background: rgba(239, 68, 68, 0.15);
+            transform: translateX(5px);
+        }
+
+        .severity-high { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+        .severity-medium { border-left-color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+        .severity-low { border-left-color: #10b981; background: rgba(16, 185, 129, 0.1); }
+
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .compliance-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .compliance-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-compliant { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .status-partial { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .status-non-compliant { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+        .recommendations {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .risk-meter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .meter-bar {
+            flex: 1;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            transition: width 1s ease-in-out;
+            border-radius: 6px;
+        }
+
+        .risk-high .meter-fill { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .risk-medium .meter-fill { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        .risk-low .meter-fill { background: linear-gradient(90deg, #10b981, #059669); }
+
+        .executive-summary {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .key-finding {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid #8b5cf6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-left: 1rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.75rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border-radius: 50%;
+            border: 3px solid #0f0f23;
+        }
+
+        @media (max-width: 768px) {
+            .system-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Public Transit Payment Systems</h1>
+            <div class="subtitle">Cybersecurity Infrastructure Audit Report</div>
+            <div class="subtitle">MTA OMNY & NJ Transit Mobile Ticketing Analysis</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('overview')">Executive Summary</button>
+            <button class="tab" onclick="showTab('vulnerabilities')">Vulnerabilities</button>
+            <button class="tab" onclick="showTab('compliance')">Compliance</button>
+            <button class="tab" onclick="showTab('recommendations')">Recommendations</button>
+        </div>
+
+        <div id="overview" class="content active">
+            <div class="executive-summary">
+                <h2 style="color: #f1f5f9; margin-bottom: 1.5rem;">Executive Summary</h2>
+                <p style="margin-bottom: 1rem;">This comprehensive cybersecurity audit examines the payment infrastructure of two major public transit systems: MTA's OMNY contactless payment system and NJ Transit's mobile ticketing platform. The analysis reveals significant privacy vulnerabilities and compliance gaps that expose millions of daily users to potential security risks.</p>
+                
+                <div class="key-finding">
+                    <h4>Key Finding: Critical Privacy Vulnerability in OMNY</h4>
+                    <p>OMNY's "recent trips" feature allows anyone with a credit card number and expiration date to access detailed trip history, creating serious privacy and safety concerns for users in domestic violence situations or those requiring location privacy.</p>
+                </div>
+
+                <div class="system-grid">
+                    <div class="system-card">
+                        <h3 class="system-title">🚇 MTA OMNY System</h3>
+                        <div class="risk-meter risk-high">
+                            <span>Risk Level:</span>
+                            <div class="meter-bar">
+                                <div class="meter-fill" style="width: 85%"></div>
+                            </div>
+                            <span>High (85%)</span>
+                        </div>
+                        <p><strong>Daily Users:</strong> ~4 million</p>
+                        <p><strong>Launch:</strong> 2019 (full rollout by 2025)</p>
+                        <p><strong>Primary Concerns:</strong> Data tracking, weak privacy policy, law enforcement data sharing</p>
+                    </div>
+
+                    <div class="system-card">
+                        <h3 class="system-title">🚌 NJ Transit Mobile</h3>
+                        <div class="risk-meter risk-medium">
+                            <span>Risk Level:</span>
+                            <div class="meter-bar">
+                                <div class="meter-fill" style="width: 65%"></div>
+                            </div>
+                            <span>Medium (65%)</span>
+                        </div>
+                        <p><strong>Daily Users:</strong> ~200,000</p>
+                        <p><strong>Launch:</strong> 2018</p>
+                        <p><strong>Primary Concerns:</strong> PCI DSS compliance gaps, limited security transparency</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="color: #f1f5f9; margin-bottom: 1rem;">Security Assessment Timeline</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4 style="color: #3b82f6;">August 2023</h4>
+                        <p>Privacy experts discover OMNY trip history vulnerability allowing unauthorized access with basic credit card information.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 style="color: #8b5cf6;">July 2024</h4>
+                        <p>OMNY system experiences major glitch causing false bulk charges and account lockouts during software update.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 style="color: #06b6d4;">2024-2025</h4>
+                        <p>Ongoing rollout expansion to include students, reduced-fare customers, and integration with TrainTime app.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="vulnerabilities" class="content">
+            <h2 style="color: #f1f5f9; margin-bottom: 2rem;">Identified Vulnerabilities</h2>
+            
+            <div class="system-grid">
+                <div class="system-card">
+                    <h3 class="system-title">MTA OMNY Vulnerabilities</h3>
+                    <ul class="vulnerability-list">
+                        <li class="vulnerability-item severity-high">
+                            <strong>Trip History Exposure (CVE-Level Risk)</strong><br>
+                            Anyone with credit card number + expiration can access detailed trip history via "recent trips" feature
+                        </li>
+                        <li class="vulnerability-item severity-high">
+                            <strong>Inadequate Privacy Policy</strong><br>
+                            No explicit warrant requirement for law enforcement data sharing
+                        </li>
+                        <li class="vulnerability-item severity-medium">
+                            <strong>System Instability</strong><br>
+                            July 2024 software update caused widespread false charges and account lockouts
+                        </li>
+                        <li class="vulnerability-item severity-medium">
+                            <strong>Extensive Data Collection</strong><br>
+                            Collects and stores detailed location and travel pattern data with broad sharing permissions
+                        </li>
+                        <li class="vulnerability-item severity-low">
+                            <strong>Third-Party Integration Risks</strong><br>
+                            Multiple vendor relationships create expanded attack surface
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="system-card">
+                    <h3 class="system-title">NJ Transit Mobile Vulnerabilities</h3>
+                    <ul class="vulnerability-list">
+                        <li class="vulnerability-item severity-medium">
+                            <strong>Limited Security Transparency</strong><br>
+                            Minimal public disclosure of security measures and incident response procedures
+                        </li>
+                        <li class="vulnerability-item severity-medium">
+                            <strong>PCI DSS Compliance Gaps</strong><br>
+                            Unclear adherence to mobile payment security standards
+                        </li>
+                        <li class="vulnerability-item severity-low">
+                            <strong>App Security Hardening</strong><br>
+                            Potential lack of code obfuscation and anti-tampering measures
+                        </li>
+                        <li class="vulnerability-item severity-low">
+                            <strong>Data Encryption Standards</strong><br>
+                            Insufficient information about end-to-end encryption implementation
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="color: #f1f5f9; margin-bottom: 1rem;">Vulnerability Distribution</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+                    <div style="background: rgba(239, 68, 68, 0.1); padding: 1.5rem; border-radius: 12px; border: 2px solid #ef4444;">
+                        <h4 style="color: #ef4444;">High Severity</h4>
+                        <div style="font-size: 2rem; font-weight: 800; color: #ef4444;">3</div>
+                    </div>
+                    <div style="background: rgba(245, 158, 11, 0.1); padding: 1.5rem; border-radius: 12px; border: 2px solid #f59e0b;">
+                        <h4 style="color: #f59e0b;">Medium Severity</h4>
+                        <div style="font-size: 2rem; font-weight: 800; color: #f59e0b;">4</div>
+                    </div>
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 12px; border: 2px solid #10b981;">
+                        <h4 style="color: #10b981;">Low Severity</h4>
+                        <div style="font-size: 2rem; font-weight: 800; color: #10b981;">2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="compliance" class="content">
+            <h2 style="color: #f1f5f9; margin-bottom: 2rem;">Regulatory Compliance Assessment</h2>
+            
+            <div class="compliance-grid">
+                <div class="compliance-card">
+                    <h3 style="color: #f1f5f9;">PCI DSS Compliance</h3>
+                    <div class="compliance-status status-partial">Partially Compliant</div>
+                    <p><strong>MTA OMNY:</strong> Claims PCI DSS compliance but lacks transparency in implementation details and third-party processor oversight.</p>
+                    <p><strong>NJ Transit:</strong> State portal mentions PCI DSS adherence but mobile app-specific compliance documentation is limited.</p>
+                </div>
+
+                <div class="compliance-card">
+                    <h3 style="color: #f1f5f9;">GDPR/CCPA Privacy</h3>
+                    <div class="compliance-status status-non-compliant">Non-Compliant</div>
+                    <p><strong>OMNY:</strong> Privacy policy allows broad data sharing without explicit consent. Trip history accessibility violates privacy principles.</p>
+                    <p><strong>NJ Transit:</strong> Limited privacy controls and unclear data retention policies.</p>
+                </div>
+
+                <div class="compliance-card">
+                    <h3 style="color: #f1f5f9;">Mobile App Security</h3>
+                    <div class="compliance-status status-partial">Needs Assessment</div>
+                    <p>Both systems require comprehensive mobile security testing including:</p>
+                    <ul style="margin-top: 0.5rem;">
+                        <li>Code obfuscation analysis</li>
+                        <li>Runtime application self-protection (RASP)</li>
+                        <li>Certificate pinning implementation</li>
+                        <li>Root/jailbreak detection</li>
+                    </ul>
+                </div>
+
+                <div class="compliance-card">
+                    <h3 style="color: #f1f5f9;">Data Retention</h3>
+                    <div class="compliance-status status-non-compliant">Inadequate</div>
+                    <p>Neither system provides clear data retention schedules or user deletion rights, creating compliance risks under emerging privacy regulations.</p>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="color: #f1f5f9; margin-bottom: 1rem;">Compliance Framework Analysis</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h4 style="color: #3b82f6; margin-bottom: 1rem;">OMNY Compliance Gaps</h4>
+                        <div class="risk-meter risk-high">
+                            <span>Privacy Protection:</span>
+                            <div class="meter-bar"><div class="meter-fill" style="width: 25%"></div></div>
+                            <span>25%</span>
+                        </div>
+                        <div class="risk-meter risk-medium">
+                            <span>Data Security:</span>
+                            <div class="meter-bar"><div class="meter-fill" style="width: 60%"></div></div>
+                            <span>60%</span>
+                        </div>
+                        <div class="risk-meter risk-medium">
+                            <span>Transparency:</span>
+                            <div class="meter-bar"><div class="meter-fill" style="width: 40%"></div></div>
+                            <span>40%</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="color: #8b5cf6; margin-bottom: 1rem;">NJ Transit Compliance</h4>
+                        <div class="risk-meter risk-medium">
+                            <span>Privacy Protection:</span>
+                            <div class="meter-bar"><div class="meter-fill" style="width: 50%"></div></div>
+                            <span>50%</span>
+                        </div>
+                        <div class="risk-meter risk-medium">
+                            <span>Data Security:</span>
+                            <div class="meter-bar"><div class="meter-fill" style="width: 65%"></div></div>
+                            <span>65%</span>
+                        </div>
+                        <div class="risk-meter risk-high">
+                            <span>Transparency:</span>
+                            <div class="meter-bar"><div class="meter-fill" style="width: 30%"></div></div>
+                            <span>30%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="recommendations" class="content">
+            <h2 style="color: #f1f5f9; margin-bottom: 2rem;">Security Recommendations</h2>
+            
+            <div class="recommendations">
+                <h3 style="color: #10b981; margin-bottom: 1rem;">🚨 Immediate Actions Required</h3>
+                <ul style="list-style: none;">
+                    <li style="margin: 0.5rem 0;">✓ <strong>OMNY:</strong> Implement authentication for trip history access</li>
+                    <li style="margin: 0.5rem 0;">✓ <strong>OMNY:</strong> Revise privacy policy to require warrants for law enforcement data sharing</li>
+                    <li style="margin: 0.5rem 0;">✓ <strong>Both Systems:</strong> Conduct third-party security penetration testing</li>
+                    <li style="margin: 0.5rem 0;">✓ <strong>Both Systems:</strong> Implement comprehensive incident response procedures</li>
+                </ul>
+            </div>
+
+            <div class="system-grid">
+                <div class="system-card">
+                    <h3 class="system-title">MTA OMNY Recommendations</h3>
+                    <h4 style="color: #3b82f6; margin: 1rem 0;">Security Enhancements</h4>
+                    <ul style="list-style: none; margin-left: 0;">
+                        <li>🔐 Implement multi-factor authentication for account access</li>
+                        <li>🛡️ Add trip history access controls and user consent mechanisms</li>
+                        <li>📊 Limit data collection to operational necessities only</li>
+                        <li>🔄 Establish clear data retention and deletion policies</li>
+                        <li>👁️ Implement user-controlled privacy settings</li>
+                    </ul>
+                    
+                    <h4 style="color: #3b82f6; margin: 1rem 0;">Technical Improvements</h4>
+                    <ul style="list-style: none; margin-left: 0;">
+                        <li>⚡ Improve system stability and update procedures</li>
+                        <li>🔍 Implement real-time fraud detection</li>
+                        <li>📱 Add account activity monitoring and alerts</li>
+                        <li>🔒 Enhanced encryption for stored travel data</li>
+                    </ul>
+                </div>
+
+                <div class="system-card">
+                    <h3 class="system-title">NJ Transit Recommendations</h3>
+                    <h4 style="color: #8b5cf6; margin: 1rem 0;">Compliance & Transparency</h4>
+                    <ul style="list-style: none; margin-left: 0;">
+                        <li>📋 Publish detailed PCI DSS compliance documentation</li>
+                        <li>🔍 Conduct regular third-party security audits</li>
+                        <li>📖 Improve security policy transparency</li>
+                        <li>👥 Establish bug bounty program</li>
+                        <li>📊 Implement security metrics reporting</li>
+                    </ul>
+                    
+                    <h4 style="color: #8b5cf6; margin: 1rem 0;">Mobile Security</h4>
+                    <ul style="list-style: none; margin-left: 0;">
+                        <li>🛡️ Implement code obfuscation and anti-tampering</li>
+                        <li>📱 Add certificate pinning and root detection</li>
+                        <li>🔐 Enhance session management and timeout controls</li>
+                        <li>🔄 Implement secure backup and recovery procedures</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="color: #f1f5f9; margin-bottom: 1rem;">Implementation Timeline</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4 style="color: #ef4444;">0-30 Days (Critical)</h4>
+                        <p>Fix OMNY trip history vulnerability, implement basic access controls, emergency incident response plan</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 style="color: #f59e0b;">30-90 Days (High Priority)</h4>
+                        <p>Complete security audits, update privacy policies, implement enhanced authentication systems</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 style="color: #3b82f6;">90-180 Days (Medium Priority)</h4>
+                        <p>Deploy comprehensive monitoring, establish bug bounty programs, complete mobile app hardening</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 style="color: #10b981;">180+ Days (Long-term)</h4>
+                        <p>Regular compliance assessments, advanced threat detection, user privacy control features</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="executive-summary">
+                <h3 style="color: #f1f5f9; margin-bottom: 1rem;">Budget Considerations</h3>
+                <p><strong>Estimated Implementation Costs:</strong></p>
+                <ul style="margin: 1rem 0;">
+                    <li>Security audit and penetration testing: $150,000 - $300,000</li>
+                    <li>System vulnerability remediation: $500,000 - $1,200,000</li>
+                    <li>Privacy compliance upgrades: $200,000 - $500,000</li>
+                    <li>Ongoing monitoring and maintenance: $100,000 - $200,000 annually</li>
+                </ul>
+                <p><strong>ROI:</strong> Investment in cybersecurity prevents potential costs of data breaches (avg. $4.45M per incident) and regulatory fines, while maintaining public trust in critical transportation infrastructure.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all content
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected content and activate tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Animate progress bars when page loads
+        window.addEventListener('load', function() {
+            const meters = document.querySelectorAll('.meter-fill');
+            meters.forEach(meter => {
+                const width = meter.style.width;
+                meter.style.width = '0%';
+                setTimeout(() => {
+                    meter.style.width = width;
+                }, 500);
+            });
+        });
+
+        // Add hover effects and interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click effects to vulnerability items
+            const vulnerabilityItems = document.querySelectorAll('.vulnerability-item');
+            vulnerabilityItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateX(5px)';
+                    }, 150);
+                });
+            });
+
+            // Add dynamic typing effect to the main title
+            const title = document.querySelector('h1');
+            const originalText = title.textContent;
+            title.textContent = '';
+            let i = 0;
+            
+            function typeWriter() {
+                if (i < originalText.length) {
+                    title.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            }
+            
+            setTimeout(typeWriter, 500);
+
+            // Add pulse animation to high severity items
+            const highSeverityItems = document.querySelectorAll('.severity-high');
+            highSeverityItems.forEach(item => {
+                setInterval(() => {
+                    item.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.3)';
+                    setTimeout(() => {
+                        item.style.boxShadow = 'none';
+                    }, 1000);
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
